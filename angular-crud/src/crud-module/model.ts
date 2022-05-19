@@ -4,12 +4,18 @@ export interface CrudModel {
   api: CrudEndpoints;
   filter: string[];
   fields: Field[];
+  listFields: Field[];
+  editPanels: Panel[];
+  detailPanels: Panel[];
 }
 
 export interface CrudEndpoints {
   url: string;
 }
-
+export interface Panel {
+  name?: string;
+  rows: Field[][];
+}
 export interface Field {
   name: string;
   isId: boolean;

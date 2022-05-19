@@ -1,0 +1,29 @@
+<mat-card *ngIf="!successfulLogin">
+  <mat-card-title>SMEC Vendor Login</mat-card-title>
+  <div *ngIf="loading" class="cover"></div>
+  <mat-card-content>
+    <form (ngSubmit)="login()" [formGroup]="loginForm">
+      <p>
+        <mat-form-field>
+          <input formControlName="username" matInput placeholder="Username" type="text">
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input formControlName="password" matInput placeholder="Password" type="password">
+        </mat-form-field>
+      </p>
+
+      <div *ngIf="loginForm.errors?.incorrect" class="form-errors">
+        {{ loginForm.errors?.incorrect }}
+      </div>
+
+      <div class="button">
+        <button mat-button type="submit">Login</button>
+      </div>
+
+    </form>
+    <mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,8 @@
+{
+  "/Api/*": {
+    "target": "http://clientsza.surbanajurong.com:83",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

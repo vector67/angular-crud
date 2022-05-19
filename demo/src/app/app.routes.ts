@@ -1,7 +1,9 @@
 import { ExtraOptions, PreloadAllModules, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { LoginFormComponent } from "./components/login-form/login-form.component";
 
 export const APP_ROUTES: Routes = [
+  {path: 'login', component: LoginFormComponent},
   {
     path: '',
     redirectTo: 'home',

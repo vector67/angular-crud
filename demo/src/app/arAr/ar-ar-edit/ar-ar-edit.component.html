@@ -1,0 +1,183 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+        <li class="breadcrumb-item active">AR</li>
+    </ol>
+</nav>
+<h2>AR Detail</h2>
+<!-- todo: figure out better material styling for alerts -->
+<div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+<form *ngIf="arAr" #editForm="ngForm" (ngSubmit)="save()">
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="document_name">document_name</mat-label>
+                                <input matInput [(ngModel)]="arAr.document_name" id="document_name" name="document_name" placeholder="document_name">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="uploadfile">uploadfile</mat-label>
+                                <input matInput [(ngModel)]="arAr.uploadfile" id="uploadfile" name="uploadfile" placeholder="uploadfile">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_proj_no_c">Prj No</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_proj_no_c" id="prj_ar_proj_no_c" name="prj_ar_proj_no_c" placeholder="Prj No">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_proj_name_c">Project name</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_proj_name_c" id="prj_ar_proj_name_c" name="prj_ar_proj_name_c" placeholder="Project name">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="accounts_ar_ar_1_name">Account</mat-label>
+                                <input matInput [(ngModel)]="arAr.accounts_ar_ar_1_name" id="accounts_ar_ar_1_name" name="accounts_ar_ar_1_name" placeholder="Account">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_amount_c">Invoice</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_amount_c" id="prj_ar_amount_c" name="prj_ar_amount_c" placeholder="Invoice">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_inv_no_c">Inv no</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_inv_no_c" id="prj_ar_inv_no_c" name="prj_ar_inv_no_c" placeholder="Inv no">
+                        </mat-form-field>
+                </div>
+        </div>
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_inv_date_c">Inv date</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_inv_date_c" id="prj_ar_inv_date_c" name="prj_ar_inv_date_c" placeholder="Inv date">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_days_c">Days</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_days_c" id="prj_ar_days_c" name="prj_ar_days_c" placeholder="Days">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="project_ar_ar_1_name">Projects</mat-label>
+                                <input matInput [(ngModel)]="arAr.project_ar_ar_1_name" id="project_ar_ar_1_name" name="project_ar_ar_1_name" placeholder="Projects">
+                        </mat-form-field>
+                </div>
+        </div>
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_billing_org_c">Org</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_billing_org_c" id="prj_ar_billing_org_c" name="prj_ar_billing_org_c" placeholder="Org">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_billing_function_c">Billing function</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_billing_function_c" id="prj_ar_billing_function_c" name="prj_ar_billing_function_c" placeholder="Billing function">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_pm_c">PM</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_pm_c" id="prj_ar_pm_c" name="prj_ar_pm_c" placeholder="PM">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="ar_reg_dropdown_forfilter_c">Region</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_reg_dropdown_forfilter_c" id="ar_reg_dropdown_forfilter_c" name="ar_reg_dropdown_forfilter_c" placeholder="Region">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="ar_pd_c">PD</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_pd_c" id="ar_pd_c" name="ar_pd_c" placeholder="PD">
+                        </mat-form-field>
+                </div>
+        </div>
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_evc_code_c">Code</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_evc_code_c" id="prj_ar_evc_code_c" name="prj_ar_evc_code_c" placeholder="Code">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_evc_name_c">EVC name</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_evc_name_c" id="prj_ar_evc_name_c" name="prj_ar_evc_name_c" placeholder="EVC name">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_cons_client_c">Client z</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_cons_client_c" id="prj_ar_cons_client_c" name="prj_ar_cons_client_c" placeholder="Client z">
+                        </mat-form-field>
+                </div>
+        </div>
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="ar_legal_action_c">Legal</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_legal_action_c" id="ar_legal_action_c" name="ar_legal_action_c" placeholder="Legal">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="ar_legal_comments_c">Legal comments</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_legal_comments_c" id="ar_legal_comments_c" name="ar_legal_comments_c" placeholder="Legal comments">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="l1_legal_ar_ar_name">Legal Case</mat-label>
+                                <input matInput [(ngModel)]="arAr.l1_legal_ar_ar_name" id="l1_legal_ar_ar_name" name="l1_legal_ar_ar_name" placeholder="Legal Case">
+                        </mat-form-field>
+                </div>
+        </div>
+        <div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_payment_amount_c">Payment amount from BST</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_payment_amount_c" id="prj_ar_payment_amount_c" name="prj_ar_payment_amount_c" placeholder="Payment amount from BST">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_date">Est. Pay</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_date" id="prj_ar_date" name="prj_ar_date" placeholder="Est. Pay">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="prj_ar_amount_outstanding_c">AR Bal</mat-label>
+                                <input matInput [(ngModel)]="arAr.prj_ar_amount_outstanding_c" id="prj_ar_amount_outstanding_c" name="prj_ar_amount_outstanding_c" placeholder="AR Bal">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="ar_client_days_c">Client AR days</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_client_days_c" id="ar_client_days_c" name="ar_client_days_c" placeholder="Client AR days">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="ar_payment_status_c">Payment status</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_payment_status_c" id="ar_payment_status_c" name="ar_payment_status_c" placeholder="Payment status">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="ar_payment_calculated_date_c">Payment calculated date</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_payment_calculated_date_c" id="ar_payment_calculated_date_c" name="ar_payment_calculated_date_c" placeholder="Payment calculated date">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="ar_inter_co_text_c">Inter Company</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_inter_co_text_c" id="ar_inter_co_text_c" name="ar_inter_co_text_c" placeholder="Inter Company">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label  for="ar_payment_delta_c">Payment days Diff</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_payment_delta_c" id="ar_payment_delta_c" name="ar_payment_delta_c" placeholder="Payment days Diff">
+                        </mat-form-field>
+                </div>
+                <div class="row">
+                        <mat-form-field>
+                            <mat-label  for="ar_withholding_tax_c">Withholding tax cert outstanding</mat-label>
+                                <input matInput [(ngModel)]="arAr.ar_withholding_tax_c" id="ar_withholding_tax_c" name="ar_withholding_tax_c" placeholder="Withholding tax cert outstanding">
+                        </mat-form-field>
+                </div>
+        </div>
+    <div class="button-row" role="group">
+        <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Save</button>
+        <button type="button" mat-button color="accent" (click)="cancel()">Cancel</button>
+    </div>
+</form>

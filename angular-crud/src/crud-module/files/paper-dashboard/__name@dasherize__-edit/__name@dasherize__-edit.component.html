@@ -12,7 +12,11 @@
     <% for (let field of model.fields) { %>
       <div class="form-group">
         <label<%if (!field.readonly) {%> for="<%=field.name%>"<%}%>><%=field.label%></label>
-        <%if (field.readonly) {%>{{<%=camelize(name)%>.<%=field.name%> || 'n/a'}} <%}%><%if (!field.readonly && field.type === 'date'){ %><input type="date" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control"><% } else if (!field.readonly && field.type === 'number'){ %><input type="number" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control"><% } else if (!field.readonly) { %><input [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control"><% } %>
+        <%if (field.readonly) {%>{{<%=camelize(name)%>.<%=field.name%> || 'n/a'}} <%}%>
+        <%if (!field.readonly && field.type === 'date'){ %><input type="date" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control">
+        <% } else if (!field.readonly && field.type === 'number'){ %><input type="number" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control">
+        <% } else if (!field.readonly && field.type === 'hidden'){ %><input type="hidden" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>">
+       <% } else if (!field.readonly) { %><input [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" class="form-control"><% } %>
       </div>
     <% } %>
       <button type="submit" class="btn btn-primary" [disabled]="!editForm.form.valid">Save</button>
