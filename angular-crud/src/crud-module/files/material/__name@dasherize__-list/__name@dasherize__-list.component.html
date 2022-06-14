@@ -19,11 +19,31 @@
   <!-- todo: figure out better material styling for alerts -->
   <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
   <%_ let id = getId(model); -%>
-  <table mat-table #table [dataSource]="<%=camelize(name)%>List">
-    <%_ for (let field of model.listFields) { -%>
+  <table mat-table #table [dataSource]="<%=camelize(name)%>List" class="mat-elevation-z8 responsive-table">
+    <%_ for (let field of getListFields(model)) { -%>
     <ng-container matColumnDef="<%=field.name%>">
       <mat-header-cell *matHeaderCellDef> <%=field.label%> </mat-header-cell>
-      <mat-cell *matCellDef="let item"> {{item.<%=field.name%><%=(field.control === 'date')? ' | date': '' %>}} </mat-cell>
+      <mat-cell *matCellDef="let item; let i = index">
+        <%_ if (field.type === 'relate') { -%>
+        <a href="<%=pluralize(field.relationship.moduleId)%>/{{item.<%=field.relationship.idName%>}}">
+        <!-- <a href="index.php?module=<%=field.module%>&offset={{i}}&stamp={$pageData.stamp}&return_module={$linkModule}&action={$action}&record={$record}"> -->
+        <%_ } -%>
+
+        <%_ if (field.type === 'url') { -%>
+        <a href="{{item.<%=field.name%>}}">{{item.<%=field.name%>}}</a>
+        <%_ } else if (field.type === 'image') { -%>
+        <img src="{{item.<%=field.name%>}}">
+        <%_ } else if (field.type === 'date') { -%>
+        {{item.<%=field.name%> | date}}
+        <%_ } else if (field.type === 'enum' || field.type === 'dynamicenum') { -%>
+        {{enums['<%=field.name%>'][item.<%=field.name%>]}}
+        <%_ } else { -%>
+        {{item.<%=field.name%>}}
+        <%_ } -%>
+        <%_ if (field.type === 'relate') { -%>
+        </a>
+        <%_ } -%>
+        </mat-cell>
     </ng-container>
     <%_ } -%>
     <ng-container matColumnDef="actions">

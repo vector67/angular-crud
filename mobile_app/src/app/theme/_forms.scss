@@ -1,0 +1,93 @@
+.file-input {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: center;
+  align-items: baseline;
+
+  & > button,
+  & > mat-form-field.mat-form-field {
+    width: auto;
+    min-width: auto;
+    margin-right: 15px;
+  }
+
+  & > mat-form-field.mat-form-field {
+    flex-grow: 2;
+  }
+}
+
+mat-form-field.full-width, div.full-width {
+  width: 100%;
+}
+
+mat-form-field.half-width, div.half-width {
+  width: 100%;
+}
+div.horizontal-children {
+  display: flex;
+}
+mat-form-field.left-side {
+  flex-grow: 1;
+  margin-right: 15px;
+}
+button.right-side {
+  flex-grow: 0;
+  height: auto;
+  align-self: center;
+}
+
+div.field-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  &.with-checkbox {
+    align-items: center;
+  }
+}
+
+@media (min-width: 800px) {
+  mat-form-field.full-width, div.full-width {
+    width: 100%;
+  }
+  mat-form-field.half-width, div.half-width {
+    width: 47%;
+  }
+
+  div.field-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    align-items: flex-end;
+    min-width: 550px;
+  }
+}
+
+mat-card-title,
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+div.form-errors {
+  padding: 16px;
+  width: 300px;
+  color: white;
+  background-color: red;
+}
+
+div.button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#file_opener {
+  display: none;
+}

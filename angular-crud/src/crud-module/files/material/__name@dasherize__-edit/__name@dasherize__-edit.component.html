@@ -4,36 +4,85 @@
         <li class="breadcrumb-item active"><%=model.title%></li>
     </ol>
 </nav>
-<h2><%=model.title%> Detail</h2>
 <!-- todo: figure out better material styling for alerts -->
-<div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
-<form *ngIf="<%=camelize(name)%>" #editForm="ngForm" (ngSubmit)="save()">
-  <%_ for (let panel of model.editPanels) { -%>
-    <div>
-      <%_ for (let row of panel) { -%>
-        <div class="row">
-          <%_ for (let field of row) { -%>
-            <mat-form-field>
-                <mat-label <%if (!field.readonly) { %> for="<%=field.name%>"<%}%>><%=field.label%></mat-label>
-              <%_ if (field.readonly) { -%>
-                <input matInput [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>" readonly>
-              <%_ } else if (field.type === 'date') { -%>
-                <input matInput [matDatepicker]="picker" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>"><mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle><mat-datepicker #picker></mat-datepicker>
-              <%_ } else if (field.type === 'number') { -%>
-                <input matInput type="number" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
-              <%_ } else if (field.type === 'hidden') { -%>
-                <input type="hidden" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
-              <%_ } else { -%>
-                <input matInput [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+
+<mat-card>
+    <mat-card-title><%=model.title%> Detail</mat-card-title>
+    <div *ngIf="loading" class="cover"></div>
+    <mat-card-content>
+        <div *ngIf="feedback.message" class="alert alert-{{feedback.type}}">{{ feedback.message }}</div>
+        <form *ngIf="<%=camelize(name)%>" #editForm="ngForm" (ngSubmit)="save()">
+          <%_ for (let panel of model.editPanels) { -%>
+            <div>
+              <%_ for (let row of panel.rows) { -%>
+                <div class="row">
+                  <%_ for (let field of row) { field = getModelField(model, field); -%>
+                    <%_ if (field.type === 'relate') { -%>
+                    <div class="half-width horizontal-children">
+                      <mat-form-field class="left-side">
+                        <mat-label for="<%=field.name%>"><%= field.relationship.moduleName%></mat-label>
+                        <input matInput #<%=field.name%>="ngModel" type="string" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>"
+                               placeholder="<%= field.relationship.moduleName%>">
+                        <input type="hidden" [(ngModel)]="<%=camelize(name)%>.<%=field.relationship.idName%>"
+                               id="<%=field.relationship.idName%>" name="<%=field.relationship.idName%>">
+                      </mat-form-field>
+                      <button mat-raised-button class="right-side" type="button" (click)="openDialog('<%= field.relationship.moduleName%>', '<%= field.relationship.moduleId%>', '<%=field.name%>', '<%=field.relationship.idName%>', <%=field.name%>.dirty)">
+                        <mat-icon aria-hidden="false" aria-label="search icon">search</mat-icon>
+                      </button>
+                      <button mat-raised-button class="right-side" type="button" (click)="clear('<%=field.name%>', '<%=field.relationship.idName%>')">
+                        <mat-icon aria-hidden="false" aria-label="search icon">delete</mat-icon>
+                      </button>
+                    </div>
+                    <%_ } else if (field.type === 'file') { -%>
+                    <div class="file-input">
+                      <button (click)="chooseFile()" color="primary" mat-flat-button type="button">Choose File</button>
+                      <input #file_opener (change)="handleFileChange($event)" id="file_opener" type="file">
+                      <mat-form-field>
+                        <input [value]="fileName" matInput placeholder="File" type="text">
+                      </mat-form-field>
+                    </div>
+                    <%_ } else { /* relate type fields */ -%>
+                    <mat-form-field class="half-width">
+                        <mat-label <%if (!field.readonly) { %>for="<%=field.name%>"<%}%>><%=field.label%></mat-label>
+                      <%_ if (field.readonly) { -%>
+                        <input matInput [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>" readonly>
+                      <%_ } else if (field.type === 'date') { -%>
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>"><mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle><mat-datepicker #picker></mat-datepicker>
+                      <%_ } else if (field.type === 'number') { -%>
+                        <input matInput type="number" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+                      <%_ } else if (field.type === 'hidden') { -%>
+                        <input type="hidden" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+                      <%_ } else if (field.type === 'email') { -%>
+                        <input matInput type="email" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+                      <%_ } else if (field.type === 'Manyenum' || field.type === 'manyenum') { -%>
+                        <input matInput type="text" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>" readonly>
+                      <%_ } else if (field.type === 'phone') { -%>
+                        <input matInput type="phone" [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+                      <%_ } else if (field.type === 'enum') { -%>
+                        <mat-select [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>">
+                          <%_ for (let option of field.options) { -%>
+                          <mat-option value="<%= option[0] %>"><%= option[1] %></mat-option>
+                          <%_ } -%>
+                        </mat-select>
+                      <%_ } else if (field.type === 'dynamicenum') { -%>
+                        <mat-select [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>">
+                          <mat-option *ngFor="let option of filterOptions(dynamicEnums['<%=field.name%>'], <%=camelize(name)%>.<%=field.parentenum%>)" [value]="option[0]">{{ option[1] }}</mat-option>
+                        </mat-select>
+                      <%_ } else { -%>
+                        <input matInput [(ngModel)]="<%=camelize(name)%>.<%=field.name%>" id="<%=field.name%>" name="<%=field.name%>" placeholder="<%=field.label%>">
+                      <%_ } -%>
+                    </mat-form-field>
+                    <%_ } -%>
+                  <%_ } -%>
+                </div>
               <%_ } -%>
-            </mat-form-field>
+            </div>
           <%_ } -%>
-        </div>
-      <%_ } -%>
-    </div>
-  <%_ } -%>
-    <div class="button-row" role="group">
-        <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Save</button>
-        <button type="button" mat-button color="accent" (click)="cancel()">Cancel</button>
-    </div>
-</form>
+            <div class="button-row" role="group">
+                <button type="submit" mat-raised-button color="primary" [disabled]="!editForm.form.valid">Save</button>
+                <button type="button" mat-button color="accent" (click)="cancel()">Cancel</button>
+            </div>
+        </form>
+<mat-spinner *ngIf="loading" color="accent"></mat-spinner>
+</mat-card-content>
+</mat-card>

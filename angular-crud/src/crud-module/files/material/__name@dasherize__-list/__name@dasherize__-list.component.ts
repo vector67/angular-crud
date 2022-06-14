@@ -12,10 +12,19 @@ import { <%= classify(name) %> } from '../<%=dasherize(name)%>';
   ]
 })
 export class <%= classify(name) %>ListComponent implements OnInit {
-  displayedColumns = [<% for (let field of model.fields) { %>'<%=field.name%>',<% } %>'actions'];
+  displayedColumns = [<% for (let field of getListFields(model)) { %>'<%=field.name%>',<% } %>'actions'];
   filter = new <%= classify(name) %>Filter();
   selected<%=classify(name)%>!: <%= classify(name) %>;
   feedback: any = {};
+  enums: any = {
+    <%_ for (let field of getListFields(model).filter(field => field.type === 'enum' || field.type === 'dynamicenum')) { -%>
+    '<%= field.name %>': {
+      <%_ for (let option of field.options) { -%>
+      '<%= option[0] %>':'<%= option[1].replace(/'/g, "\\\'") %>',
+      <%_ } -%>
+    },
+    <%_ } -%>
+  };
 
   get <%=camelize(name)%>List(): <%= classify(name) %>[] {
     return this.<%=camelize(name)%>Service.<%=camelize(name)%>List;

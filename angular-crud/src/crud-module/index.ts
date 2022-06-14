@@ -60,9 +60,10 @@ export function generate(options: CrudOptions): Rule {
       options.project = workspace.projects.keys().next().value;
     }
     const project = workspace.projects.get(options.project);
-    const appPath = `${project?.sourceRoot}/app/modules`;
+    const appPath = `${project?.sourceRoot}/app`;
+    const modulePath = `${appPath}/modules`;
 
-    const modelFile = `${appPath}/${options.name}/${options.model}`;
+    const modelFile = `${modulePath}/${options.name}/${options.model}`;
     const modelBuffer = host.read(modelFile);
 
     if (modelBuffer === null) {
@@ -85,7 +86,7 @@ export function generate(options: CrudOptions): Rule {
         ...crudModelUtils as any,
         model
       }),
-      move(`${appPath}/${options.name}`),
+      move(`${modulePath}/${options.name}`),
     ]);
 
     return mergeWith(templateSource, MergeStrategy.Overwrite);

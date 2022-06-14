@@ -1,0 +1,33 @@
+<h2 mat-dialog-title class="text-center">Search for {{ data.moduleName }}</h2>
+<mat-dialog-content class="mat-typography text-center">
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.searchName" (keyup)="searchTerms$.next($event)">
+  </mat-form-field>
+  <div *ngIf="message" class="alert alert-warning text-dark">
+    {{ message }}
+  </div>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 text-left" *ngIf="!loading && dataSource.length">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Button Column -->
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button (click)="select(element.id, element.name)">SELECT</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <br>
+</mat-dialog-content>

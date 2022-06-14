@@ -2,22 +2,21 @@ import { <%= classify(name) %> } from './<%=dasherize(name)%>';
 import { <%= classify(name) %>Filter } from './<%=dasherize(name)%>-filter';
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { ModuleService } from "../../../api";
+import { ModelObject } from "../../../api/model/model-object";
 
-const headers = new HttpHeaders().set('Accept', 'application/json');
 
 @Injectable()
 export class <%= classify(name) %>Service {
   <%=camelize(name)%>List: <%=classify(name)%>[] = [];<% const id = getId(model); %>
-  api = '<%= model.api.url %>';
+  api_module_name = '<%= model.api.apiModuleName %>';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private moduleService: ModuleService) {
   }
 
   findById(id: string): Observable<<%= classify(name) %>> {
-    const url = `${this.api}/${id}`;
-    const params = { <%=id.name%>: id };
-    return this.http.get<<%= classify(name) %>>(url, {params, headers});
+    return this.moduleService.moduleModuleNameIdGet<<%= classify(name) %>>(this.api_module_name, id);
   }
 
   load(filter: <%= classify(name) %>Filter): void {
@@ -32,33 +31,37 @@ export class <%= classify(name) %>Service {
   }
 
   find(filter: <%= classify(name) %>Filter): Observable<<%= classify(name) %>[]> {
-    const params = {<% for (const field of getFilterFields(model)) { %>
-      '<%=field.name%>': filter.<%=field.name%>,<%  } %>
-    };
-
-    return this.http.get<<%= classify(name) %>[]>(this.api, {params, headers});
+    const filters: any[] = [];
+    <%_ for (const field of getFilterFields(model)) { -%>
+    if (filter.<%=field.name%>) {
+      filters.push({ 'column': '<%=field.name%>', 'operator': 'eq', 'values': [filter.<%=field.name%>] });
+    }
+    <%_ } -%>
+    return this.moduleService.moduleModuleGet(this.api_module_name, filters);
   }
+  
 
   save(entity: <%= classify(name) %>): Observable<<%= classify(name) %>> {
-    let params = new HttpParams();
-    let url = '';
-    if (entity.<%=id.name%>) {
-      url = `${this.api}/${entity.<%=id.name%>.toString()}`;
-      params = new HttpParams().set('ID', entity.<%=id.name%>.toString());
-      return this.http.put<<%= classify(name) %>>(url, entity, {headers, params});
+    let body: ModelObject = {
+      data: {
+        type: this.api_module_name,
+        attributes: {
+          ...entity,
+        }
+      }
+    };
+
+    if (entity.id) {
+      body.data.id = entity.id;
+      return this.moduleService.modulePatch(body);
     } else {
-      url = `${this.api}`;
-      return this.http.post<<%= classify(name) %>>(url, entity, {headers, params});
+      return this.moduleService.modulePost(body);
     }
   }
 
   delete(entity: <%= classify(name) %>): Observable<<%= classify(name) %>> {
-    let params = new HttpParams();
-    let url = '';
-    if (entity.<%=id.name%>) {
-      url = `${this.api}/${entity.<%=id.name%>.toString()}`;
-      params = new HttpParams().set('ID', entity.<%=id.name%>.toString());
-      return this.http.delete<<%= classify(name) %>>(url, {headers, params});
+    if (entity.id) {
+      return this.moduleService.moduleModuleNameIdDelete(this.api_module_name, entity.id);
     }
     return EMPTY;
   }
